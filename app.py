@@ -5,6 +5,7 @@ from urllib.parse import urlencode
 
 app = Flask(__name__)
 
+
 code_challenge = secrets.token_urlsafe(100)[:128]
 base_url = "login.eveonline.org/oauth/authorize"
 client_id = 'd40c1a23ee8a433ab3e161b46c105e9c'
