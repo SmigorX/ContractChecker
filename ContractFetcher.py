@@ -2,6 +2,8 @@ from flask import Flask, request, redirect
 import requests
 import secrets
 from urllib.parse import urlencode
+import json
+
 
 app = Flask(__name__)
 
@@ -52,18 +54,18 @@ def exchange():
         'client_id': f"{url_builder.client_id}",
     }
 
+    global token
     request_url = "https://login.eveonline.com/oauth/token"
     response = requests.post(request_url, headers=headers, data=body)
-    global token
     token = response.json()['access_token']
 
     if response.content:
-        return token and redirect("http://localhost:5000/Get_Character_id", code=302)
+        return token and redirect("http://localhost:5000/get_character_id", code=302)
     else:
         return {'message': 'Error, could not get the access token ' + str(token.status_code)}
 
 
-@app.route('/Get_Character_id')
+@app.route('/get_character_id')
 def get_character_id():
     headers = {
         'Authorization': f"Bearer {token}",
@@ -71,12 +73,35 @@ def get_character_id():
 
     response = requests.get('https://esi.evetech.net/verify', headers=headers)
 
+    global character_id
     if response.status_code == 200:
-        global character_id
         character_id = str(response.json()['CharacterID'])
-        return character_id and redirect("http://localhost:5000/contracts", code=302)
+        return character_id and redirect("http://localhost:5000/get_corporation_id", code=302)
     else:
         return {'message': 'Error while getting the character ID ' + str(response.status_code)}
+
+@app.route('/get_corporation_id')
+def get_corp_id():
+    headers = {
+        'accept': 'application/json',
+        'Cache-Control': 'no-cache',
+    }
+
+    params = {
+        'datasource': 'tranquility',
+    }
+
+    response = requests.get(f'https://esi.evetech.net/latest/characters/{character_id}/', params=params, headers=headers)
+
+    global corporation_id
+
+    corporation_id = response.json()
+    corporation_id = str(corporation_id["corporation_id"])
+
+    if response.status_code == 200:
+        return corporation_id and redirect("http://localhost:5000/contracts", code=302)
+    else:
+        return {'message': 'Error while getting the corp ID ' + str(response.status_code)}
 
 
 @app.route('/contracts')
@@ -91,10 +116,13 @@ def contract():
         "datasource": "tranquility"
     }
 
-    contracts = requests.get(f"https://esi.evetech.net/latest/characters/{character_id}/contracts/", headers=headers,
-                             params=params)
-    return contracts.json()
+    returned_contracts = requests.get(f"https://esi.evetech.net/latest/corporations/{corporation_id}/contracts/",
+                                      headers=headers,
+                                      params=params)
 
+    returned_contracts = returned_contracts.json()
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    with open("contracts.json", "w") as f:
+        json.dump(returned_contracts, f)
+
+    return returned_contracts
