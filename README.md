@@ -1,2 +1,2 @@
 # ContractChecker
-Repository for my EVE Online contract checker program
+Simple app to check stock available on to your corp and alliance.

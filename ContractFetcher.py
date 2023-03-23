@@ -1,8 +1,6 @@
 from flask import Flask, request, redirect
-import requests
-import secrets
+import requests, secrets, json
 from urllib.parse import urlencode
-import json
 
 
 app = Flask(__name__)
@@ -76,9 +74,25 @@ def get_character_id():
     global character_id
     if response.status_code == 200:
         character_id = str(response.json()['CharacterID'])
-        return character_id and redirect("http://localhost:5000/get_corporation_id", code=302)
+        return character_id and redirect("http://localhost:5000/get_character_name", code=302)
     else:
         return {'message': 'Error while getting the character ID ' + str(response.status_code)}
+
+
+@app.route('/get_character_name')
+def get_character_name():
+
+    endpoint = f'https://esi.evetech.net/latest/characters/{character_id}/'
+
+    response = requests.get(endpoint.format(character_id=character_id))
+
+    global character_name
+    if response.status_code == 200:
+        character_data = response.json()
+        character_name = character_data['name']
+        return character_name and redirect("http://localhost:5000/get_corporation_id", code=302)
+    else:
+        return f"Error: {response.status_code} - {response.text}"
 
 @app.route('/get_corporation_id')
 def get_corp_id():
@@ -125,4 +139,4 @@ def contract():
     with open("contracts.json", "w") as f:
         json.dump(returned_contracts, f)
 
-    return returned_contracts
+    return "You can now close this tab"
