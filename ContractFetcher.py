@@ -1,9 +1,10 @@
-from flask import Flask, request, redirect
-import requests, secrets, json
-from urllib.parse import urlencode
+import json
+import threading
 
+import requests
+import secrets
 
-app = Flask(__name__)
+from flask import Flask, request
 
 
 class UrlBuilder:
@@ -13,7 +14,6 @@ class UrlBuilder:
         self.client_id = 'd40c1a23ee8a433ab3e161b46c105e9c'
         self.callback_url = 'http://localhost:5000/callback'
         self.scopes = 'esi-contracts.read_corporation_contracts.v1 esi-contracts.read_character_contracts.v1'
-
         self.args = {
             'code_challenge': self.code_challenge,
             'response_type': 'code',
@@ -23,120 +23,130 @@ class UrlBuilder:
         }
 
 
-url_builder = UrlBuilder()
+class APICalls:
+    def __init__(self):
+        self.url_builder = UrlBuilder()
+        self.eve_auth_code: str = None
+
+    def exchange(self):     # Exchanges OAuth code for access token
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+
+        body = {
+            'grant_type': "authorization_code",
+            'code': f"{self.eve_auth_code}",
+            'code_verifier': f"{self.url_builder.code_challenge}",
+            'client_id': f"{self.url_builder.client_id}",
+        }
+
+        request_url = "https://login.eveonline.com/oauth/token"
+        response = requests.post(request_url, headers=headers, data=body)
+        self.token = response.json()['access_token']
+
+        if response.content:
+            return self.token and self.get_character_id()
+        else:
+            return {'message': 'Error, could not get the access token ' + str(self.token.status_code)}
+
+    def get_character_id(self):
+        headers = {
+            'Authorization': f"Bearer {self.token}",
+        }
+
+        response = requests.get('https://esi.evetech.net/verify', headers=headers)
+        if response.status_code == 200:
+            self.character_id = str(response.json()['CharacterID'])
+
+            with open("name.txt", "w") as f:
+                f.write(self.character_id)
 
 
-@app.route('/')
-def hello_world():
-    auth_url = 'https://%s?%s' % (url_builder.base_url, urlencode(url_builder.args))
-    return '<a href="' + auth_url + '">Click here to authorize the application</a>'
+            return self.character_id and self.get_character_name()
+        else:
+            return {'message': 'Error while getting the character ID ' + str(response.status_code)}
+
+    def get_character_name(self):
+
+        url = f'https://esi.evetech.net/latest/characters/{self.character_id}/?datasource=tranquility'
+
+        response = requests.get(url)
+
+        character_name = response.json()
+        character_name = str(character_name["name"])
+
+        with open("name.txt", "w") as f:
+            json.dump(character_name, f)
+
+        return self.get_corp_id()
+
+    def get_corp_id(self):
+        headers = {
+            'accept': 'application/json',
+            'Cache-Control': 'no-cache',
+        }
+
+        params = {
+            'datasource': 'tranquility',
+        }
+
+        response = requests.get(f'https://esi.evetech.net/latest/characters/{self.character_id}/',
+                                params=params, headers=headers)
+
+        self.corporation_id = response.json()
+        self.corporation_id = str(self.corporation_id["corporation_id"])
+
+        if response.status_code == 200:
+            return self.corporation_id and self.contract()
+        else:
+            return {'message': 'Error while getting the corp ID ' + str(response.status_code)}
+
+    def contract(self):
+        headers = {
+            "Accept": "application/json",
+            "Authorization": f"Bearer {self.token}",
+            "Cache-Control": "no-cache",
+        }
+
+        params = {
+            "datasource": "tranquility"
+        }
+
+        returned_contracts = requests.get(f"https://esi.evetech.net/latest/corporations/{self.corporation_id}/contracts/",
+                                          headers=headers,
+                                          params=params)
+
+        returned_contracts = returned_contracts.json()
+
+        with open("contracts.json", "w") as f:
+            json.dump(returned_contracts, f)
+
+        return "You can now close this tab"
 
 
-@app.route('/callback')  # Gets one time use OAuth code
+class App(Flask):
+    def __init__(self, import_name):
+        super().__init__(import_name)
+        self.caller = APICalls()
+        self.thread: threading.Thread = None
+
+
+app = App(__name__)
+
+
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+
+
+@app.route('/callback')
 def callback():
-    global auth_code
-    auth_code = request.args.get('code')
-    return auth_code and redirect("http://localhost:5000/exchange", code=302)
+    app.caller.eve_auth_code = request.args.get('code')
+    app.caller.exchange()
+    return "You can now close your browser"
 
 
-@app.route('/exchange')  # Exchanges OAuth code for access token
-def exchange():
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    }
-
-    body = {
-        'grant_type': "authorization_code",
-        'code': f"{auth_code}",
-        'code_verifier': f"{url_builder.code_challenge}",
-        'client_id': f"{url_builder.client_id}",
-    }
-
-    global token
-    request_url = "https://login.eveonline.com/oauth/token"
-    response = requests.post(request_url, headers=headers, data=body)
-    token = response.json()['access_token']
-
-    if response.content:
-        return token and redirect("http://localhost:5000/get_character_id", code=302)
-    else:
-        return {'message': 'Error, could not get the access token ' + str(token.status_code)}
-
-
-@app.route('/get_character_id')
-def get_character_id():
-    headers = {
-        'Authorization': f"Bearer {token}",
-    }
-
-    response = requests.get('https://esi.evetech.net/verify', headers=headers)
-
-    global character_id
-    if response.status_code == 200:
-        character_id = str(response.json()['CharacterID'])
-        return character_id and redirect("http://localhost:5000/get_character_name", code=302)
-    else:
-        return {'message': 'Error while getting the character ID ' + str(response.status_code)}
-
-
-@app.route('/get_character_name')
-def get_character_name():
-
-    endpoint = f'https://esi.evetech.net/latest/characters/{character_id}/'
-
-    response = requests.get(endpoint.format(character_id=character_id))
-
-    global character_name
-    if response.status_code == 200:
-        character_data = response.json()
-        character_name = character_data['name']
-        return character_name and redirect("http://localhost:5000/get_corporation_id", code=302)
-    else:
-        return f"Error: {response.status_code} - {response.text}"
-
-@app.route('/get_corporation_id')
-def get_corp_id():
-    headers = {
-        'accept': 'application/json',
-        'Cache-Control': 'no-cache',
-    }
-
-    params = {
-        'datasource': 'tranquility',
-    }
-
-    response = requests.get(f'https://esi.evetech.net/latest/characters/{character_id}/', params=params, headers=headers)
-
-    global corporation_id
-
-    corporation_id = response.json()
-    corporation_id = str(corporation_id["corporation_id"])
-
-    if response.status_code == 200:
-        return corporation_id and redirect("http://localhost:5000/contracts", code=302)
-    else:
-        return {'message': 'Error while getting the corp ID ' + str(response.status_code)}
-
-
-@app.route('/contracts')
-def contract():
-    headers = {
-        "Accept": "application/json",
-        "Authorization": f"Bearer {token}",
-        "Cache-Control": "no-cache",
-    }
-
-    params = {
-        "datasource": "tranquility"
-    }
-
-    returned_contracts = requests.get(f"https://esi.evetech.net/latest/corporations/{corporation_id}/contracts/",
-                                      headers=headers,
-                                      params=params)
-
-    returned_contracts = returned_contracts.json()
-
-    with open("contracts.json", "w") as f:
-        json.dump(returned_contracts, f)
-
-    return "You can now close this tab"
+if __name__ == "__main__":
+    app.run()
