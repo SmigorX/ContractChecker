@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f8aeeb10-8d64-477e-a57d-58b4bcc783a1" name="Changes" comment="Possibly version 1.0">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.py" beforeDir="false" afterPath="$PROJECT_DIR$/App.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/contracts.json" beforeDir="false" afterPath="$PROJECT_DIR$/contracts.json" afterDir="false" />
-    </list>
+    <list default="true" id="f8aeeb10-8d64-477e-a57d-58b4bcc783a1" name="Changes" comment="Minor Changes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -198,6 +193,7 @@
       <workItem from="1679791593385" duration="4314000" />
       <workItem from="1680009409098" duration="10000" />
       <workItem from="1680010452628" duration="554000" />
+      <workItem from="1680011852076" duration="307000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1678787979353</created>
@@ -227,7 +223,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679706506933</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Minor Changes">
+      <created>1680012077185</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1680012077185</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -261,7 +264,8 @@
     <MESSAGE value="Basic functions are now fully operational." />
     <MESSAGE value="requirements.txt" />
     <MESSAGE value="Possibly version 1.0" />
-    <option name="LAST_COMMIT_MESSAGE" value="Possibly version 1.0" />
+    <MESSAGE value="Minor Changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Minor Changes" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/ContractChecker$app__1_.coverage" NAME="app (1) Coverage Results" MODIFIED="1679431696732" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
