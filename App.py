@@ -162,5 +162,6 @@ while True:
     elif event == '-REFRESH-':
         stock_table = create_contract_table()
         window['-MULTILINE-'].update('\n'.join(str(x) for x in stock_table))
+        window['-CHARACTER-'].update(f'Character: {get_character_name()}')
 
 window.close()
