@@ -23,6 +23,8 @@ class UrlBuilder:
         }
 
 
+with open("name.txt", "w") as f:
+    f.write(str(0))
 class APICalls:
     def __init__(self):
         self.url_builder = UrlBuilder()
@@ -57,7 +59,6 @@ class APICalls:
         response = requests.get('https://esi.evetech.net/verify', headers=headers)
         if response.status_code == 200:
             self.character_id = str(response.json()['CharacterID'])
-
             with open("name.txt", "w") as f:
                 f.write(self.character_id)
 
@@ -76,7 +77,7 @@ class APICalls:
         character_name = str(character_name["name"])
 
         with open("name.txt", "w") as f:
-            json.dump(character_name, f)
+            f.write(character_name)
 
         return self.get_corp_id()
 

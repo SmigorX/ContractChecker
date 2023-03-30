@@ -87,16 +87,19 @@ def get_outstanding_and_merge_contracts():
                 contract_dictionary[outstanding_contracts[i]['title']] += 1
             else:
                 contract_dictionary.update({outstanding_contracts[i]['title']: 1})
-    with open("stock.json", "w") as f:
-        json.dump(contract_dictionary, f)
 
+    with open("name.txt", "r") as n:
+        while True:
+            if str(n) != str(0):
+                break
+
+    if str(contract_dictionary) != "{}":
+        with open("stock.txt", "w") as f:
+            f.write(str(contract_dictionary)[1:-1])
+    else:
+        with open("stock.txt", "w") as f:
+            f.write("{}")
 
 def main():
     check_for_updates()
     contract_fetch()
-
-main()
-
-
-
-

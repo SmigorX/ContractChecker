@@ -1,0 +1,14 @@
+{
+  "name": "contract-checker",
+  "version": "0.9.2",
+  "description": "Contract stock checker for EVE Online",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "SmigorX",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "23.2.0"
+  }
+}
