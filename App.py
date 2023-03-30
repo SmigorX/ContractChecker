@@ -9,7 +9,7 @@ from urllib.parse import urlencode
 
 import PySimpleGUIWx as sg
 
-import ContractFetcher
+import Backend.ContractFetcher as ContractFetcher
 
 
 def check_for_updates():
