@@ -6,6 +6,8 @@ import secrets
 
 from flask import Flask, request
 
+from urllib.parse import urlencode
+
 
 class UrlBuilder:
     def __init__(self, ):
@@ -25,12 +27,19 @@ class UrlBuilder:
 
 with open("name.txt", "w") as f:
     f.write(str(0))
+
+
 class APICalls:
     def __init__(self):
         self.url_builder = UrlBuilder()
-        self.eve_auth_code: str = None
-
-    def exchange(self):     # Exchanges OAuth code for access token
+        self.eve_auth_code = None
+        self.auth_url = 'https://%s?%s' % (self.url_builder.base_url, urlencode(self.url_builder.args))
+        print(self.auth_url)
+        self.character_id = None
+        self.corporation_id = None
+        self.token = None
+        self.stock = None
+    def exchange(self):  # Exchanges OAuth code for access token
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -59,9 +68,6 @@ class APICalls:
         response = requests.get('https://esi.evetech.net/verify', headers=headers)
         if response.status_code == 200:
             self.character_id = str(response.json()['CharacterID'])
-            with open("name.txt", "w") as f:
-                f.write(self.character_id)
-
 
             return self.character_id and self.get_character_name()
         else:
@@ -113,16 +119,43 @@ class APICalls:
             "datasource": "tranquility"
         }
 
-        returned_contracts = requests.get(f"https://esi.evetech.net/latest/corporations/{self.corporation_id}/contracts/",
-                                          headers=headers,
-                                          params=params)
+        self.returned_contracts = requests.get(
+            f"https://esi.evetech.net/latest/corporations/{self.corporation_id}/contracts/",
+            headers=headers,
+            params=params)
 
-        returned_contracts = returned_contracts.json()
 
-        with open("contracts.json", "w") as f:
-            json.dump(returned_contracts, f)
+        self.stock = DataHandling.outstanding_contract_filter(self.returned_contracts.json())
+        self.stock = str(DataHandling.merge_contracts(self.stock))[1:-1]
+
+        with open("stock.txt", "w") as stock:
+            stock.write(self.stock)
 
         return "You can now close this tab"
+
+
+class DataHandling:
+    def outstanding_contract_filter(returned_contracts):
+        contracts_list = returned_contracts
+
+        outstanding_contracts = []
+        for i in range(len(contracts_list)):
+            if contracts_list[i]['type'] == "item_exchange" and contracts_list[i]['status'] == "outstanding":
+                outstanding_contracts.append(contracts_list[i])
+
+        return outstanding_contracts
+
+    def merge_contracts(outstanding_contracts):
+
+        contract_dictionary = {}
+        for i in range(len(outstanding_contracts)):
+            if not outstanding_contracts[i]['title'] == '':
+                if outstanding_contracts[i]['title'] in contract_dictionary:
+                    contract_dictionary[outstanding_contracts[i]['title']] += 1
+                else:
+                    contract_dictionary.update({outstanding_contracts[i]['title']: 1})
+
+        return contract_dictionary
 
 
 class App(Flask):

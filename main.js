@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const fs = require('fs');
+const { spawn } = require('child_process');
 
 
 let mainWindow;
@@ -48,6 +49,18 @@ ipcMain.on('read-file', async (event, filePath) => {
 app.whenReady().then(() => {
   createWindow();
 });
+
+
+const pythonProcess = spawn('python', ['./programs/App.py']);
+
+pythonProcess.stdout.on('data', (data) => {
+  console.log(`Python stdout: ${data}`);
+});
+
+pythonProcess.stderr.on('data', (data) => {
+  console.error(`Python stderr: ${data}`);
+});
+
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

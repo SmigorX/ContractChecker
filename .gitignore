@@ -1,2 +1,6 @@
-/Secrets.py
-/renders/
+/programs/Secrets.py
+/programs/App.py
+/programs/__init__.py
+/venv
+/programs/stock.txt
+/programs/name.txt
