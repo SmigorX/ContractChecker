@@ -1,0 +1,32 @@
+h1 {
+    font-size: 6mm;
+    font-weight: bold;
+    color: #CCCCCC;
+    text-align: left;
+    margin: 3px 0 3px 0;
+    padding: 0;
+}
+h2 {
+    border-bottom: 2px solid #770000;
+ }
+.box {
+    color: #CCCCCC;
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    background-color: #333333
+}
+
+button {
+    background-color: #770000;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    cursor: pointer;
+    width: 30mm;
+    min-width: 130px;
+    border: none;
+}

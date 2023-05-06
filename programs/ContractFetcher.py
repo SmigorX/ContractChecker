@@ -1,8 +1,8 @@
-import json
 import threading
 
 import requests
 import secrets
+import webbrowser
 
 from flask import Flask, request
 
@@ -25,8 +25,17 @@ class UrlBuilder:
         }
 
 
-with open("name.txt", "w") as f:
-    f.write(str(0))
+def browser_opener():
+    url_builder = UrlBuilder()
+    auth_url = 'https://%s?%s' % (url_builder.base_url, urlencode(url_builder.args))
+    return webbrowser.open(auth_url)
+
+
+browser_opener()
+
+
+with open("./name.txt", "w") as f:
+    f.truncate()
 
 
 class APICalls:
@@ -82,7 +91,7 @@ class APICalls:
         character_name = response.json()
         character_name = str(character_name["name"])
 
-        with open("name.txt", "w") as f:
+        with open("./name.txt", "w") as f:
             f.write(character_name)
 
         return self.get_corp_id()
@@ -128,9 +137,12 @@ class APICalls:
         self.stock = DataHandling.outstanding_contract_filter(self.returned_contracts.json())
         self.stock = str(DataHandling.merge_contracts(self.stock))[1:-1]
 
-        with open("stock.txt", "w") as stock:
-            stock.write(self.stock)
-
+        with open("./stock.txt", "w") as stock_file:
+            self.stock = self.stock.split(", '")
+            self.stock = [i.replace("'", "") for i in self.stock]
+            stock_file.truncate()
+            for i in range(len(self.stock)):
+                stock_file.write(str(self.stock[i])+"\n")
         return "You can now close this tab"
 
 
@@ -167,13 +179,13 @@ class App(Flask):
 
 app = App(__name__)
 
-
+"""
 def shutdown_server():
     func = request.environ.get('werkzeug.server.shutdown')
     if func is None:
         raise RuntimeError('Not running with the Werkzeug Server')
     func()
-
+"""
 
 @app.route('/callback')
 def callback():

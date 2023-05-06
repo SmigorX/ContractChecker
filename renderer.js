@@ -1,16 +1,26 @@
-const { ipcRenderer } = require('electron');
+const { ipcRenderer} = require('electron');
 
-// Wait for the DOM to be loaded before running the code
+// Use stuff like this to make absolute paths
+// path.join(app.getAppPath(), '..', 'python_scripts/my_script.py'
+
+
 window.addEventListener('DOMContentLoaded', () => {
   const fileContentElement = document.getElementById('file-content');
 
+
   ipcRenderer.on('read-file-reply', (event, fileData) => {
     if (typeof fileData === 'string') {
-      fileContentElement.textContent = `Error: ${fileData}`;
+      const lines = fileData.split('\n');
+      lines.forEach(line => {
+        const lineElement = document.createElement('div');
+        lineElement.textContent = line;
+        fileContentElement.appendChild(lineElement);
+      });
     } else {
-      fileContentElement.innerHTML = fileData.join('<br>');
+      fileContentElement.innerHTML = "Error";
     }
   });
 
   ipcRenderer.send('read-file', './programs/stock.txt');
+
 });

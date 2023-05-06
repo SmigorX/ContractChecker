@@ -13,7 +13,7 @@ def check_for_updates():
 
     username = "SmigorX"
     repository_name = "test"
-    file_path = "version.json"
+    file_path = "../Other/version.json"
 
     url = f"https://api.github.com/repos/{username}/{repository_name}/contents/{file_path}"
 
@@ -27,7 +27,7 @@ def check_for_updates():
     else:
         return False
 
-    current_version = open('version.json', 'r').read()
+    current_version = open('../Other/version.json', 'r').read()
 
     if newest_version != current_version:
         return True
