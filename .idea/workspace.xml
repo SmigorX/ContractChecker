@@ -4,23 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f8aeeb10-8d64-477e-a57d-58b4bcc783a1" name="Changes" comment="Changing how the data is processed in ContractFetcher.py">
-      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="f8aeeb10-8d64-477e-a57d-58b4bcc783a1" name="Changes" comment="Fixing main.js, chenging how ContractFetcher.py writes stock and how it's read to make sure all possitions appear in new line. Doing some CSS">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CSS/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Other/LEGAL" beforeDir="false" afterPath="$PROJECT_DIR$/LEGAL" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Other/LICENCE" beforeDir="false" afterPath="$PROJECT_DIR$/LICENCE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Other/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Other/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Other/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/programs/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Other/version.json" beforeDir="false" afterPath="$PROJECT_DIR$/programs/version.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/programs/App.py" beforeDir="false" afterPath="$PROJECT_DIR$/programs/App.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/programs/ContractFetcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/programs/ContractFetcher.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/programs/name.txt" beforeDir="false" afterPath="$PROJECT_DIR$/programs/name.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/renderer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/static/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +36,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="MIXED" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -88,7 +76,7 @@
       <recent name="C:\Users\Admin\Projects\PythonProjects\ContractChecker\Backend" />
     </key>
   </component>
-  <component name="RunManager" selected="Node.js.main.js (1)">
+  <component name="RunManager" selected="Python.ContractFetcher">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="ContractChecker" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -153,6 +141,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="ContractFetcher" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ContractCheckerFront" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/programs" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/programs/ContractFetcher.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="ContractChecker" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -167,28 +177,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="ContractCheckerFront" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/programs" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/programs/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -291,10 +279,11 @@
       <item itemvalue="Node.js.main.js" />
       <item itemvalue="npm.start" />
       <item itemvalue="Python.ContractChecker" />
-      <item itemvalue="Python.test" />
+      <item itemvalue="Python.ContractFetcher" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.ContractFetcher" />
         <item itemvalue="npm.start" />
         <item itemvalue="Node.js.main.js (1)" />
         <item itemvalue="Node.js.renderer.js" />
@@ -334,7 +323,11 @@
       <workItem from="1681508392601" duration="2372000" />
       <workItem from="1681731423983" duration="191000" />
       <workItem from="1681767345695" duration="10113000" />
-      <workItem from="1683384836992" duration="6326000" />
+      <workItem from="1683384836992" duration="7183000" />
+      <workItem from="1683474748566" duration="379000" />
+      <workItem from="1683836496541" duration="52000" />
+      <workItem from="1683987590630" duration="1010000" />
+      <workItem from="1683988627464" duration="737000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1678787979353</created>
@@ -392,7 +385,28 @@
       <option name="project" value="LOCAL" />
       <updated>1681773774867</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Changing how the data is processed in ContractFetcher.py">
+      <created>1683393785278</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1683393785278</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Fixing main.js, chenging how ContractFetcher.py writes stock and how it's read to make sure all possitions appear in new line. Doing some CSS">
+      <created>1683393870650</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1683393870650</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Fixing main.js, chenging how ContractFetcher.py writes stock and how it's read to make sure all possitions appear in new line. Doing some CSS">
+      <created>1683393910528</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1683393910528</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -409,7 +423,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/main" />
+                        <option value="HEAD" />
                       </list>
                     </value>
                   </entry>
@@ -418,6 +432,16 @@
             </State>
           </value>
         </entry>
+        <entry key="a6e6473d-64b4-4c47-8fba-4030b5d0ec9f">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="a6e6473d-64b4-4c47-8fba-4030b5d0ec9f" value="TOOL_WINDOW" />
       </map>
     </option>
   </component>
@@ -430,11 +454,10 @@
     <MESSAGE value="Changing how the data is processed and returned." />
     <MESSAGE value="Foundation of the Electron JS front." />
     <MESSAGE value="Changing how the data is processed in ContractFetcher.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changing how the data is processed in ContractFetcher.py" />
+    <MESSAGE value="Fixing main.js, chenging how ContractFetcher.py writes stock and how it's read to make sure all possitions appear in new line. Doing some CSS" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing main.js, chenging how ContractFetcher.py writes stock and how it's read to make sure all possitions appear in new line. Doing some CSS" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ContractChecker$App.coverage" NAME="App Coverage Results" MODIFIED="1683385761995" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/programs" />
-    <SUITE FILE_PATH="coverage/ContractChecker$test.coverage" NAME="test Coverage Results" MODIFIED="1683392614023" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/programs" />
-    <SUITE FILE_PATH="coverage/ContractChecker$ContractFetcher.coverage" NAME="ContractFetcher Coverage Results" MODIFIED="1683391674492" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/programs" />
+    <SUITE FILE_PATH="coverage/ContractChecker$ContractFetcher.coverage" NAME="ContractFetcher Coverage Results" MODIFIED="1683989045010" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/programs" />
   </component>
 </project>

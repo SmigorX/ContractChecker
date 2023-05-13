@@ -25,25 +25,11 @@ class UrlBuilder:
         }
 
 
-def browser_opener():
-    url_builder = UrlBuilder()
-    auth_url = 'https://%s?%s' % (url_builder.base_url, urlencode(url_builder.args))
-    return webbrowser.open(auth_url)
-
-
-browser_opener()
-
-
-with open("./name.txt", "w") as f:
-    f.truncate()
-
-
 class APICalls:
     def __init__(self):
         self.url_builder = UrlBuilder()
         self.eve_auth_code = None
         self.auth_url = 'https://%s?%s' % (self.url_builder.base_url, urlencode(self.url_builder.args))
-        print(self.auth_url)
         self.character_id = None
         self.corporation_id = None
         self.token = None
@@ -83,7 +69,6 @@ class APICalls:
             return {'message': 'Error while getting the character ID ' + str(response.status_code)}
 
     def get_character_name(self):
-
         url = f'https://esi.evetech.net/latest/characters/{self.character_id}/?datasource=tranquility'
 
         response = requests.get(url)
@@ -92,6 +77,7 @@ class APICalls:
         character_name = str(character_name["name"])
 
         with open("./name.txt", "w") as f:
+            f.truncate()
             f.write(character_name)
 
         return self.get_corp_id()
@@ -143,6 +129,7 @@ class APICalls:
             stock_file.truncate()
             for i in range(len(self.stock)):
                 stock_file.write(str(self.stock[i])+"\n")
+
         return "You can now close this tab"
 
 
@@ -170,22 +157,22 @@ class DataHandling:
         return contract_dictionary
 
 
+def browser_opener():
+    url_builder = UrlBuilder()
+    auth_url = 'https://%s?%s' % (url_builder.base_url, urlencode(url_builder.args))
+    return webbrowser.open(auth_url)
+
+
 class App(Flask):
     def __init__(self, import_name):
         super().__init__(import_name)
         self.caller = APICalls()
         self.thread: threading.Thread = None
+        browser_opener()
 
 
 app = App(__name__)
 
-"""
-def shutdown_server():
-    func = request.environ.get('werkzeug.server.shutdown')
-    if func is None:
-        raise RuntimeError('Not running with the Werkzeug Server')
-    func()
-"""
 
 @app.route('/callback')
 def callback():
