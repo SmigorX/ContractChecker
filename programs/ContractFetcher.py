@@ -1,11 +1,10 @@
-import threading
-
 import requests
 import secrets
 import webbrowser
+import threading
 
 from flask import Flask, request
-
+from werkzeug.serving import make_server
 from urllib.parse import urlencode
 
 
@@ -34,7 +33,12 @@ class APICalls:
         self.corporation_id = None
         self.token = None
         self.stock = None
-    def exchange(self):  # Exchanges OAuth code for access token
+
+    def browser_opener(self):
+        url_builder = UrlBuilder()
+        auth_url = 'https://%s?%s' % (url_builder.base_url, urlencode(url_builder.args))
+        return webbrowser.open(auth_url)
+    def exchange(self):
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -99,11 +103,11 @@ class APICalls:
         self.corporation_id = str(self.corporation_id["corporation_id"])
 
         if response.status_code == 200:
-            return self.corporation_id and self.contract()
+            return self.corporation_id and self.get_contract()
         else:
             return {'message': 'Error while getting the corp ID ' + str(response.status_code)}
 
-    def contract(self):
+    def get_contract(self):
         headers = {
             "Accept": "application/json",
             "Authorization": f"Bearer {self.token}",
@@ -122,15 +126,15 @@ class APICalls:
 
         self.stock = DataHandling.outstanding_contract_filter(self.returned_contracts.json())
         self.stock = str(DataHandling.merge_contracts(self.stock))[1:-1]
+        self.stock = self.stock.split(", '")
+        self.stock = [i.replace("'", "") for i in self.stock]
 
         with open("./stock.txt", "w") as stock_file:
-            self.stock = self.stock.split(", '")
-            self.stock = [i.replace("'", "") for i in self.stock]
             stock_file.truncate()
             for i in range(len(self.stock)):
                 stock_file.write(str(self.stock[i])+"\n")
 
-        return "You can now close this tab"
+        return "Api_done"
 
 
 class DataHandling:
@@ -157,18 +161,12 @@ class DataHandling:
         return contract_dictionary
 
 
-def browser_opener():
-    url_builder = UrlBuilder()
-    auth_url = 'https://%s?%s' % (url_builder.base_url, urlencode(url_builder.args))
-    return webbrowser.open(auth_url)
-
-
 class App(Flask):
     def __init__(self, import_name):
         super().__init__(import_name)
+
         self.caller = APICalls()
-        self.thread: threading.Thread = None
-        browser_opener()
+        self.caller.browser_opener()
 
 
 app = App(__name__)
@@ -178,8 +176,14 @@ app = App(__name__)
 def callback():
     app.caller.eve_auth_code = request.args.get('code')
     app.caller.exchange()
-    return "You can now close your browser"
+    return "You can now close this window" and shutdown()
+
+def shutdown():
+    server.shutdown()
+    return 'Server shutting down'
 
 
 if __name__ == "__main__":
-    app.run()
+    server = make_server('localhost', 5000, app, threaded=True)
+    server_thread = threading.Thread(target=server.serve_forever)
+    server_thread.start()
