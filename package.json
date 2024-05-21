@@ -9,7 +9,7 @@
   "author": "SmigorX",
   "license": "MIT",
   "devDependencies": {
-    "electron": "23.2.0"
+    "electron": "24.8.5"
   },
   "dependencies": {
     "boolean": "^3.2.0",
